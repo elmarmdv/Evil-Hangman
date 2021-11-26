@@ -15,8 +15,13 @@ public class EvilHangman {
 	private TreeSet<Character> incorrectGuesses;
 	private SolutionManipulator manipulator;
 
-	EvilHangman() {
-		this.dictionaryFile = "engDictionary.txt";
+	// separate constructors into two for convenient testing w/ other files
+	public EvilHangman() {
+		this("engDictionary.txt");
+	}
+
+	public EvilHangman(String dictionarySource) {
+		this.dictionaryFile = dictionarySource;
 		this.dictionary = new ArrayList<String>();
 		this.incorrectGuesses = new TreeSet<Character>();
 
@@ -75,7 +80,7 @@ public class EvilHangman {
 			System.out.println("You have already tried that letter.");
 		} else {
 			ArrayList<Character> previousSolution = (ArrayList<Character>) partialSolution.clone();
-			partialSolution = manipulator.calculateBestPosition(previousSolution, userInput.charAt(0));
+			partialSolution = manipulator.findBestSolution(previousSolution, userInput.charAt(0));
 			if (previousSolution.equals(partialSolution)) {
 				System.out.println("No such letter in this word!");
 				incorrectGuesses.add(userInput.charAt(0));
@@ -89,7 +94,10 @@ public class EvilHangman {
 				"Game over! The word was " + solution + ". You guessed the solution in " + numberOfGuesses + " tries.");
 	}
 
-	private void dictionaryToArrayList(String fileName) throws IOException {
+	public void dictionaryToArrayList(String fileName) throws IOException {
+
+		// ADD TRY CATCH AND DELETE THROWS??!
+
 		FileInputStream fs = new FileInputStream(fileName);
 		Scanner scnr = new Scanner(fs);
 
@@ -105,5 +113,9 @@ public class EvilHangman {
 			str += list.get(i);
 		}
 		return str;
+	}
+
+	public ArrayList<String> getWordList() {
+		return this.dictionary;
 	}
 }

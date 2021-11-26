@@ -8,7 +8,8 @@ public class SolutionManipulator {
 	// words
 	HashMap<ArrayList<Character>, ArrayList<String>> wordFamilies;
 
-	SolutionManipulator(int length, ArrayList<String> allWords) {
+	public SolutionManipulator(int length, ArrayList<String> allWords) {
+
 		this.wordLength = length;
 		wordFamilies = new HashMap<ArrayList<Character>, ArrayList<String>>();
 		remainingWords = new ArrayList<String>();
@@ -34,7 +35,7 @@ public class SolutionManipulator {
 		return emptyChars == 0;
 	}
 
-	public ArrayList<Character> calculateBestPosition(ArrayList<Character> partialSolution, char chosenLetter) {
+	public ArrayList<Character> findBestSolution(ArrayList<Character> partialSolution, char chosenLetter) {
 		// general: take the chosenLetter and see where/if we should place it
 
 		ArrayList<Character> candidateSolution = new ArrayList<Character>(this.wordLength);
@@ -104,71 +105,5 @@ public class SolutionManipulator {
 
 		System.out.println("Remaining words: " + remainingWords);
 		return bestSolution;
-
-//		ArrayList<ArrayList> allCandidateFamilies = new ArrayList<ArrayList>(this.wordLength);
-//		
-//		allCandidateFamilies.set(0, calculateFamilies(ListToString(partialSolution))); // first take: what if we don't place the letter at all
-//		ArrayList<Character> candidateSolution = new ArrayList<Character>(this.wordLength);
-//		
-//		for (int i = 0; i < this.wordLength; i++) {
-//			candidateSolution = partialSolution; // set to default
-//			// set the i'th letter to user input and call calculateFamilies
-//			if (candidateSolution.get(i) != '_') {
-//				candidateSolution.set(i, chosenLetter); 
-//			}
-//			allCandidateFamilies.set(0, calculateFamilies(ListToString(candidateSolution)));
-//		}
-//		
-//		int maxFamilies = 0;
-//		int maxFamilyIndex = 0;
-//		for (int i = 0; i < allCandidateFamilies.size(); i++) {
-//			if (allCandidateFamilies.get(i).size() > maxFamilies) {
-//				maxFamilies = allCandidateFamilies.get(i).size();
-//				maxFamilyIndex = i;
-//			}
-//		}
-//		
-//		// make remainingWords consist of the words of the biggest family
-//		remainingWords = allCandidateFamilies.get(maxFamilyIndex);
-//				
-//		bestCandidate = ???;
-//				
-//		// WHAT TO DO WHEN IN THE END THE BEST WORD MIGHT HAVE TWO LETTERS???
-//		
-//		// return best solution / updated current state
-//		return candidateSolution;
 	}
-
-//	// DELETE LATER!
-//	public ArrayList<String> calculateFamilies(String candidate) {
-//		// "clear" the family array for current candidate
-//		ArrayList<String> candidateFamily = new ArrayList<String>();
-//
-//		for (String word : remainingWords) {
-//			if (word.length() == candidate.length() && checkIfWordFits(word, candidate)) {
-//				candidateFamily.add(word);
-//			}
-//		}
-//		return candidateFamily;
-//	}
-
-//	public boolean checkIfWordFits(String word, String candidate) {
-//		boolean wordFits = true;
-//		for (int i = 0; i < word.length(); i++) {
-//			if (word.charAt(i) != candidate.charAt(i) && word.charAt(i) != '_') {
-//				wordFits = false;
-//			}
-//		}
-//		return wordFits;
-//	}
-
-//	public ArrayList<Object> copyList(ArrayList<Object> inputList) {
-//		ArrayList<Object> outputList = new ArrayList<Object>();
-//
-//		for (int i = 0; i < inputList.size(); i++) {
-//			outputList.add(i, inputList.get(i));
-//		}
-//		return outputList;
-//	}
-
 }
