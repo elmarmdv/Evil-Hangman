@@ -15,7 +15,7 @@ public class EvilHangman {
 	private TreeSet<Character> incorrectGuesses;
 	private SolutionManipulator manipulator;
 
-	// separate constructors into two for convenient testing w/ other files
+	// two separate constructors for convenient testing w/ other files
 	public EvilHangman() {
 		this("engDictionary.txt");
 	}
@@ -37,8 +37,14 @@ public class EvilHangman {
 	}
 
 	public void start() {
-		int numberOfGuesses = 0; // to keep track of number of guesses (for fun)
-		generateRandomLength();
+		numberOfGuesses = 0; // to keep track of number of guesses (for fun)
+
+		// generate random word length
+		int randomInt = new Random().nextInt(dictionary.size());
+		String randomWord = dictionary.get(randomInt);
+		this.wordLength = randomWord.length();
+
+		partialSolution = generateEmptySolution(this.wordLength); // generate an arraylist of empty slots
 		manipulator = new SolutionManipulator(wordLength, dictionary);
 		while (!manipulator.solutionComplete(partialSolution)) {
 			askForInput();
@@ -46,16 +52,14 @@ public class EvilHangman {
 		printFinalMessage(ListToString(partialSolution));
 	}
 
-	private void generateRandomLength() {
-		int randomInt = new Random().nextInt(dictionary.size());
-		String randomWord = dictionary.get(randomInt);
+	public ArrayList<Character> generateEmptySolution(int length) {
+		// generates an "empty" arraylist of characters based on provided length
+		ArrayList<Character> emptySolution = new ArrayList<Character>(length);
 
-		this.wordLength = randomWord.length();
-		partialSolution = new ArrayList<Character>(this.wordLength);
-
-		for (int i = 0; i < this.wordLength; i++) {
-			partialSolution.add(i, '_');
+		for (int i = 0; i < length; i++) {
+			emptySolution.add(i, '_');
 		}
+		return emptySolution;
 	}
 
 	private void printCurrentState() {
@@ -68,7 +72,6 @@ public class EvilHangman {
 
 	private void askForInput() {
 		System.out.println("Please enter a letter.");
-
 		printCurrentState();
 
 		Scanner inputScnr = new Scanner(System.in);
@@ -79,6 +82,8 @@ public class EvilHangman {
 		} else if (incorrectGuesses.contains(userInput.charAt(0)) || partialSolution.contains(userInput.charAt(0))) {
 			System.out.println("You have already tried that letter.");
 		} else {
+			// if input was new letter, call findBestSolution() and update new partial
+			// solution
 			ArrayList<Character> previousSolution = (ArrayList<Character>) partialSolution.clone();
 			partialSolution = manipulator.findBestSolution(previousSolution, userInput.charAt(0));
 			if (previousSolution.equals(partialSolution)) {
@@ -95,8 +100,7 @@ public class EvilHangman {
 	}
 
 	public ArrayList<String> dictionaryToArrayList(String fileName) throws IOException {
-		// Note: no handling here, because this method is called
-		// from a try block
+		// transforms a dictionary file into an arraylist of words
 		FileInputStream fs = new FileInputStream(fileName);
 		Scanner scnr = new Scanner(fs);
 
@@ -109,7 +113,8 @@ public class EvilHangman {
 		return wordList;
 	}
 
-	private String ListToString(ArrayList<Character> list) {
+	public String ListToString(ArrayList<Character> list) {
+		// transforms an arraylist of characters into a string
 		String str = "";
 		for (int i = 0; i < list.size(); i++) {
 			str += list.get(i);
