@@ -23,11 +23,11 @@ public class SolutionManipulator {
 		System.out.println("Words at the beginning: " + remainingWords.size());
 	}
 
-	public boolean solutionComplete(ArrayList<Character> partialSolution, int solutionLength) {
+	public boolean solutionComplete(ArrayList<Character> partialSolution) {
 		// check if there are empty letters left to guess
 		int emptyChars = 0;
 
-		for (int i = 0; i < solutionLength; i++) {
+		for (int i = 0; i < partialSolution.size(); i++) {
 			if (partialSolution.get(i) == '_') {
 				emptyChars++;
 			}

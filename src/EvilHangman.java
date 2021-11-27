@@ -26,7 +26,7 @@ public class EvilHangman {
 		this.incorrectGuesses = new TreeSet<Character>();
 
 		try {
-			dictionaryToArrayList(dictionaryFile);
+			this.dictionary = dictionaryToArrayList(dictionaryFile);
 		} catch (FileNotFoundException e) {
 			System.out.println("Dictionary file could not be found.");
 			e.printStackTrace();
@@ -40,7 +40,7 @@ public class EvilHangman {
 		int numberOfGuesses = 0; // to keep track of number of guesses (for fun)
 		generateRandomLength();
 		manipulator = new SolutionManipulator(wordLength, dictionary);
-		while (!manipulator.solutionComplete(partialSolution, wordLength)) {
+		while (!manipulator.solutionComplete(partialSolution)) {
 			askForInput();
 		}
 		printFinalMessage(ListToString(partialSolution));
@@ -94,17 +94,19 @@ public class EvilHangman {
 				"Game over! The word was " + solution + ". You guessed the solution in " + numberOfGuesses + " tries.");
 	}
 
-	public void dictionaryToArrayList(String fileName) throws IOException {
-
-		// ADD TRY CATCH AND DELETE THROWS??!
-
+	public ArrayList<String> dictionaryToArrayList(String fileName) throws IOException {
+		// Note: no handling here, because this method is called
+		// from a try block
 		FileInputStream fs = new FileInputStream(fileName);
 		Scanner scnr = new Scanner(fs);
 
+		ArrayList<String> wordList = new ArrayList<String>();
+
 		while (scnr.hasNext()) {
-			dictionary.add(scnr.next());
+			wordList.add(scnr.next());
 		}
 		fs.close();
+		return wordList;
 	}
 
 	private String ListToString(ArrayList<Character> list) {
