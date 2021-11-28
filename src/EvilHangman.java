@@ -44,7 +44,8 @@ public class EvilHangman {
 		String randomWord = dictionary.get(randomInt);
 		this.wordLength = randomWord.length();
 
-		partialSolution = generateEmptySolution(this.wordLength); // generate an arraylist of empty slots
+		// generate an arraylist of empty slots of above-defined length
+		partialSolution = generateEmptySolution(this.wordLength);
 		manipulator = new SolutionManipulator(wordLength, dictionary);
 		while (!manipulator.solutionComplete(partialSolution)) {
 			askForInput();
@@ -77,8 +78,9 @@ public class EvilHangman {
 		Scanner inputScnr = new Scanner(System.in);
 		String userInput = inputScnr.next();
 
-		if (userInput.length() != 1) {
-			System.out.println("Please enter a single letter character.");
+		// validate user character input and prompt accordingly
+		if (userInput.length() != 1 || !(userInput.charAt(0) >= 'a') || !(userInput.charAt(0) <= 'z')) {
+			System.out.println("Please enter a single lowercase letter character.");
 		} else if (incorrectGuesses.contains(userInput.charAt(0)) || partialSolution.contains(userInput.charAt(0))) {
 			System.out.println("You have already tried that letter.");
 		} else {
