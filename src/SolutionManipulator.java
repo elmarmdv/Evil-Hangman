@@ -39,19 +39,28 @@ public class SolutionManipulator {
 
 		ArrayList<Character> candidateSolution = new ArrayList<Character>(this.wordLength);
 
+		// Main algorithm:
+		// 1. Take each word among the remaining words
 		for (int i = 0; i < remainingWords.size(); i++) {
 			String word = remainingWords.get(i);
 			// "reset" candidateSolution to default
 			candidateSolution.clear();
 			candidateSolution = (ArrayList<Character>) partialSolution.clone();
 
+			// 2. For each word, see what partial solution would look like
+			// when taking into account user's guess
 			for (int j = 0; j < word.length(); j++) {
 				if (word.charAt(j) == chosenLetter) {
 					candidateSolution.set(j, chosenLetter);
 				}
 			}
+			// 3. If such partial solution (key) exists in our wordFamilies hashmap
+			// add this word to the arraylist (value) of words that fit this solution
 			if (wordFamilies.containsKey(candidateSolution)) {
 				(wordFamilies.get(candidateSolution)).add(word);
+
+				// 4. If such partial solution doesn't exist as a key yet, create such key
+				// and associated arraylist (value) with that word in it
 			} else {
 				// create a new key and arraylist value
 				wordFamilies.put((ArrayList<Character>) candidateSolution.clone(), new ArrayList<String>());
@@ -59,16 +68,17 @@ public class SolutionManipulator {
 			}
 		}
 
+		// Now, let's see which partial solution is best by finding which partial
+		// solution (key) has the largest arraylist of words associated with it
 		int maxWords = 0;
 		ArrayList<Character> bestSolution = new ArrayList<Character>(this.wordLength);
 
 		for (ArrayList<Character> oneSolution : wordFamilies.keySet()) {
 			// if size of this key (partial solution) is higher that max, set it to max
 			if (wordFamilies.get(oneSolution).size() > maxWords
-					// avoid returning the full word at the end if there is still another option
-					// example: if we are left with "cat" and "bat", and the user guesses 'c'
-					// then, maxWords for each is = 1, but we want to return "bat" to continue
-					&& !(remainingWords.size() > 1 && !oneSolution.contains('_'))) {
+					// or, if the sizes for two candidates is the same, then choose
+					// the one, if any, that is the original partial solution
+					|| (wordFamilies.get(oneSolution).size() == maxWords && oneSolution.equals(partialSolution))) {
 				maxWords = wordFamilies.get(oneSolution).size();
 				bestSolution = (ArrayList<Character>) oneSolution.clone();
 			}
